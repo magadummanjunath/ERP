@@ -3,18 +3,27 @@ import React, { useState, useEffect } from 'react';
 const ManageEmployee = () => {
   const [employees, setEmployees] = useState([]);
   const [editIndex, setEditIndex] = useState(-1);
+  const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
-    // Fetch employee data from a JSON source (e.g., API endpoint)
-    // For this example, we'll simulate fetching data from a JSON file.
-    fetch('/employee-data.json') // Replace with your JSON source
-      .then((response) => response.json())
-      .then((data) => {
-        setEmployees(data);
-      })
-      .catch((error) => {
-        console.error('Error fetching employee data:', error);
-      });
+    // Sample employee data (including Base64 image)
+    const sampleEmployeeData = [
+      {
+        employeeId: 1,
+        name: 'John Doe',
+        email: 'john.doe@example.com',
+        address: '123 Main St',
+        pincode: '12345',
+        experience: 5,
+        designation: 'Manager',
+        managerId: 101,
+        mobile: '123-456-7890',
+        image: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCB...your_encoded_image_here...',
+      },
+      // Add more sample employees as needed
+    ];
+
+    setEmployees(sampleEmployeeData);
   }, []);
 
   const handleEdit = (index) => {
@@ -23,20 +32,29 @@ const ManageEmployee = () => {
 
   const handleCancelEdit = () => {
     setEditIndex(-1);
+    setImageFile(null);
   };
 
   const handleUpdate = (index) => {
     // Handle the update logic here
+    // You can update the employee data, including the image, here
     setEditIndex(-1);
+    setImageFile(null);
   };
 
   const handleDelete = (index) => {
-    // Handle the delete logic here
+    const updatedEmployees = employees.filter((_, i) => i !== index);
+    setEmployees(updatedEmployees);
+  };
+
+  const handleFieldChange = (index, field, value) => {
+    const updatedEmployees = [...employees];
+    updatedEmployees[index][field] = value;
+    setEmployees(updatedEmployees);
   };
 
   return (
     <div className="container mt-4">
-      
       <table className="table">
         <thead>
           <tr>
@@ -56,21 +74,119 @@ const ManageEmployee = () => {
         <tbody>
           {employees.map((employee, index) => (
             <tr key={employee.employeeId}>
-              <td>{employee.employeeId}</td>
-              <td>{employee.name}</td>
-              <td>{employee.email}</td>
-              <td>{employee.address}</td>
-              <td>{employee.pincode}</td>
-              <td>{employee.experience}</td>
-              <td>{employee.designation}</td>
-              <td>{employee.managerId}</td>
-              <td>{employee.mobile}</td>
               <td>
-                <img
-                  src={employee.image}
-                  alt={`Employee ${employee.employeeId}`}
-                  style={{ maxWidth: '50px' }}
-                />
+                {editIndex === index ? (
+                  <input
+                    type="text"
+                    value={employee.employeeId}
+                    onChange={(e) => handleFieldChange(index, 'employeeId', e.target.value)}
+                  />
+                ) : (
+                  employee.employeeId
+                )}
+              </td>
+              <td>
+                {editIndex === index ? (
+                  <input
+                    type="text"
+                    value={employee.name}
+                    onChange={(e) => handleFieldChange(index, 'name', e.target.value)}
+                  />
+                ) : (
+                  employee.name
+                )}
+              </td>
+              <td>
+                {editIndex === index ? (
+                  <input
+                    type="text"
+                    value={employee.email}
+                    onChange={(e) => handleFieldChange(index, 'email', e.target.value)}
+                  />
+                ) : (
+                  employee.email
+                )}
+              </td>
+              <td>
+                {editIndex === index ? (
+                  <input
+                    type="text"
+                    value={employee.address}
+                    onChange={(e) => handleFieldChange(index, 'address', e.target.value)}
+                  />
+                ) : (
+                  employee.address
+                )}
+              </td>
+              <td>
+                {editIndex === index ? (
+                  <input
+                    type="text"
+                    value={employee.pincode}
+                    onChange={(e) => handleFieldChange(index, 'pincode', e.target.value)}
+                  />
+                ) : (
+                  employee.pincode
+                )}
+              </td>
+              <td>
+                {editIndex === index ? (
+                  <input
+                    type="text"
+                    value={employee.experience}
+                    onChange={(e) => handleFieldChange(index, 'experience', e.target.value)}
+                  />
+                ) : (
+                  employee.experience
+                )}
+              </td>
+              <td>
+                {editIndex === index ? (
+                  <input
+                    type="text"
+                    value={employee.designation}
+                    onChange={(e) => handleFieldChange(index, 'designation', e.target.value)}
+                  />
+                ) : (
+                  employee.designation
+                )}
+              </td>
+              <td>
+                {editIndex === index ? (
+                  <input
+                    type="text"
+                    value={employee.managerId}
+                    onChange={(e) => handleFieldChange(index, 'managerId', e.target.value)}
+                  />
+                ) : (
+                  employee.managerId
+                )}
+              </td>
+              <td>
+                {editIndex === index ? (
+                  <input
+                    type="text"
+                    value={employee.mobile}
+                    onChange={(e) => handleFieldChange(index, 'mobile', e.target.value)}
+                  />
+                ) : (
+                  employee.mobile
+                )}
+              </td>
+              <td>
+                {editIndex === index ? (
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImageFile(e.target.files[0])}
+                  />
+                ) : (
+                  <img
+                    src={employee.image}
+                    alt={`Employee ${employee.employeeId}`}
+                    style={{ maxWidth: '50px' }}
+                  />
+                )}
               </td>
               <td>
                 {editIndex === index ? (
